@@ -18,7 +18,6 @@
 | 저장장치 | 1TB |
 | GPU | NVIDIA GB10 |
 | NVIDIA Driver | 580.95.05 |
-| CUDA (드라이버 표기) | 13.0 |
 | CUDA Toolkit (nvcc) | 13.0 (V13.0.88) |
 
 ---
