@@ -26,10 +26,10 @@
 
 | 항목 | 값 |
 |---|---|
-| VS Code | 2.3.41 (arm64) |
-| Cline (VS Code Extension) | saoudrizwan.claude-dev 3.55.0 |
-| LM Studio | 0.3.31+7 |
-| Open WebUI | 0.6.33 |
+| [Visual Studio Code](https://code.visualstudio.com/download) | 2.3.41 (arm64) |
+| [Cline](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev) (VS Code Extension) | saoudrizwan.claude-dev 3.55.0 |
+| [LM Studio](https://lmstudio.ai/download) | 0.3.31+7 |
+| [Open WebUI](https://github.com/open-webui/open-webui) | 0.6.33 |
 | uv | 0.9.7 |
 
 > 📝 **Cline 버전 관련**: 동일 확장이 복수 버전으로 설치돼 있을 수 있으나, 설치 목록 기준 최신(3.55.0)을 표기합니다.
