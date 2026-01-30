@@ -1,4 +1,4 @@
-# ASUS GX10 On-Premise LLM 서버 구성 명세서
+# [스칼라웍스](https://www.scalawox.com/)의 ASUS GX10 On-Premise LLM 서버를 위한 구성 명세서
 
 이 문서는 **현재 ASUS GX10 장비에 설치/구동 중인 구성**을 정리한 **명세서**입니다. (설치 매뉴얼/운영 절차는 포함하지 않음)
 
@@ -58,28 +58,29 @@
 
 총 11개 모델, 약 198GB 디스크 사용
 
-### LLM 모델
+### 권장 LLM 모델
 
-ASUS Ascent GX10 AI 슈퍼컴퓨터를 위한 스칼라웍스의 LLM 모델
+ASUS Ascent GX10 AI 슈퍼컴퓨터를 위한 LLM 모델
+(lmstudio app 내에서 검색 후 결과 중 보라색 아이콘에 해당하는 것으로 설치 권장)
 
 | 모델명 (`lms ls` 명령어 기준) | 제작사 | 크기 | 설명 | 컨텍스트 길이 |
 |------------------------|--------|------|------|---------------|
-| `exaone-4.0-32b` | LGAI | 32B | 한국어 중심 작업에 활용하기 좋은 범용 텍스트 LLM | 32768 |
-| `google/gemma-3-27b` | Google | 27B | 지시 따르기/대화형 작업에 사용하는 범용 텍스트 LLM | 32768 |
-| `openai/gpt-oss-120b` | OpenAI | 120B | 핵심 추론 벤치마크에서 OpenAI o4-mini와 거의 동등한 결과를 달성 | 8192 |
-| `openai/gpt-oss-20b` | OpenAI | 20B | 일반 벤치마크에서 OpenAI o3‑mini와 비슷한 결과를 달성했으며 빠른 반복 작업에 적합 | 32768 |
-| `qwen/qwen3-30b-a3b-2507` | Qwen | 30B-A3B | 생성 품질과 효율을 균형 있게 쓰기 위한 MoE 계열 텍스트 LLM | 32768 |
-| `qwen/qwen3-8b` | Qwen | 8B | 빠른 응답과 반복 작업에 적합한 경량 텍스트 LLM | 32768 |
-| `qwen/qwen3-vl-30b` | Qwen | 30B-A3B | 이미지+텍스트 입력을 함께 다루는 비전-언어(VL) 모델 | 65536 |
-| `qwen3-32b` | Qwen | 32B | 고정밀 텍스트 생성/분석을 위한 32B급 텍스트 LLM | 32768 |
+| [`exaone-4.0-32b`](https://huggingface.co/LGAI-EXAONE/EXAONE-4.0-32B) | LGAI | 32B | 한국어 중심 작업에 활용하기 좋은 범용 텍스트 LLM | 32768 |
+| [`google/gemma-3-27b`](https://huggingface.co/google/gemma-3-27b-it) | Google | 27B | 지시 따르기/대화형 작업에 사용하는 범용 텍스트 LLM | 32768 |
+| [`openai/gpt-oss-120b`](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 120B | 핵심 추론 벤치마크에서 OpenAI o4-mini와 거의 동등한 결과를 달성 | 8192 |
+| [`openai/gpt-oss-20b`](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 20B | 일반 벤치마크에서 OpenAI o3‑mini와 비슷한 결과를 달성했으며 빠른 반복 작업에 적합 | 32768 |
+| [`qwen/qwen3-30b-a3b-2507`](https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507) | Qwen | 30B-A3B | 생성 품질과 효율을 균형 있게 쓰기 위한 MoE 계열 텍스트 LLM | 32768 |
+| [`qwen/qwen3-8b`](https://huggingface.co/Qwen/Qwen3-8B) | Qwen | 8B | 빠른 응답과 반복 작업에 적합한 경량 텍스트 LLM | 32768 |
+| [`qwen/qwen3-vl-30b`](https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct) | Qwen | 30B-A3B | 이미지+텍스트 입력을 함께 다루는 비전-언어(VL) 모델 | 65536 |
+| [`qwen3-32b`](https://huggingface.co/Qwen/Qwen3-32B) | Qwen | 32B | 고정밀 텍스트 생성/분석을 위한 32B급 텍스트 LLM | 32768 |
 
 ### 임베딩 모델
 
 | 모델명 (`lms ls` 기준) | 제작사 | 크기 | 설명 |
 |------------------------|--------|------|------|
-| `text-embedding-bge-m3` | BAAI | 567M | 검색/유사도/벡터DB 구축용 임베딩 모델 |  |
-| `text-embedding-nomic-embed-text-v1.5` | Nomic | - | 경량 임베딩 모델(문서/질문 임베딩) |  |
-| `text-embedding-qwen3-embedding-8b` | Qwen | 8B | 고성능 임베딩 모델(대규모 문서 임베딩/검색) |  |
+| [`text-embedding-bge-m3`](https://huggingface.co/BAAI/bge-m3) | BAAI | 567M | 검색/유사도/벡터DB 구축용 임베딩 모델 |  |
+| [`text-embedding-nomic-embed-text-v1.5`](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5) | Nomic | - | 경량 임베딩 모델(문서/질문 임베딩) |  |
+| [`text-embedding-qwen3-embedding-8b`](https://huggingface.co/Qwen/Qwen3-Embedding-8B) | Qwen | 8B | 고성능 임베딩 모델(대규모 문서 임베딩/검색) |  |
 
 > 📝 **참고**: 위 컨텍스트 길이는 이 기기에서 LM Studio에 설정된 값입니다.  
 > 모델 목록 확인: `lms ls`
