@@ -1,4 +1,4 @@
-# [스칼라웍스](https://www.scalawox.com/)의 ASUS GX10 On-Premise LLM 서버를 위한 구성 명세서
+﻿# [스칼라웍스](https://www.scalawox.com/)의 ASUS GX10 On-Premise LLM 서버를 위한 구성 명세서
 
 이 문서는 **현재 ASUS GX10 장비에 설치/구동 중인 구성**을 정리한 **명세서**입니다. (설치 매뉴얼/운영 절차는 포함하지 않음)
 
@@ -27,12 +27,20 @@
 | 항목 | 값 |
 |---|---|
 | [Visual Studio Code](https://code.visualstudio.com/download) | 2.3.41 (arm64) |
-| [Cline](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev) (VS Code Extension) | saoudrizwan.claude-dev 3.55.0 |
-| [LM Studio](https://lmstudio.ai/download) | 0.3.31+7 |
-| [Open WebUI](https://github.com/open-webui/open-webui) | 0.6.33 |
+| [Continue](https://marketplace.visualstudio.com/items?itemName=Continue.continue) (VS Code Extension) | 1.2.17 |
+| [LM Studio](https://lmstudio.ai/download) | 0.4.6 (Build 1) |
+| [Open WebUI](https://github.com/open-webui/open-webui) | v0.8.10 |
+| [Page Assist](https://chromewebstore.google.com/detail/page-assist-a-web-ui-for/jfgfiigpkhlkbnfnbobbkinehhgmcaeeh) (Chrome Extension) | 1.5.57 |
+| [OpenClaw](https://openclaw.ai/) | 2026.3.13 |
 | uv | 0.9.7 |
 
-> 📝 **Cline 버전 관련**: 동일 확장이 복수 버전으로 설치돼 있을 수 있으나, 설치 목록 기준 최신(3.55.0)을 표기합니다.
+### LM Studio 연동 소프트웨어별 권장 LLM 모델
+
+| 소프트웨어 | 권장 모델 | 선택 이유 |
+|---|---|---|
+| [Continue](https://marketplace.visualstudio.com/items?itemName=Continue.continue) | `qwen/qwen3-coder-next` (1순위), `qwen/qwen3.5-27b` (범용 보조) | 코드 자동완성·리뷰 중심 — 코딩 특화 MoE로 빠른 응답, 범용 dense로 추론 보완 |
+| [Page Assist](https://chromewebstore.google.com/detail/page-assist-a-web-ui-for/jfgfiigpkhlkbnfnbobbkinehhgmcaeeh) | `nvidia/nemotron-3-nano-30b-a3b`, `openai/gpt-oss-20b`, `qwen/qwen3.5-27b` | 브라우저 사이드바는 응답 속도 우선 — 30–50 t/s 이상 모델 권장 |
+| [OpenClaw](https://openclaw.ai/) | `qwen/qwen3.5-27b`, `openai/gpt-oss-120b` | 파일·셸·브라우저 자율 조작 에이전트 — 지시 이행 정확도가 핵심, 대형 dense 모델 우선 |
 
 ---
 
@@ -44,8 +52,8 @@
 
 | 서비스 | 바인딩 | 접속 URL |
 |---|---|---|
-| Open WebUI | `0.0.0.0:8080` | `http://<DEVICE_LAN_IP>:8080` |
-| LM Studio (OpenAI 호환 API) | `127.0.0.1:1234` | `http://127.0.0.1:1234/v1` |
+| Open WebUI | `0.0.0.0:8080` | `http://<DEVICE_LAN_IP>:8080` 또는 `http://localhost:8080` (장비 로컬) |
+| LM Studio (OpenAI 호환 API) | `127.0.0.1:1234` | `http://127.0.0.1:1234/v1` 또는 `http://localhost:1234/v1` (장비 로컬) |
 
 > 📝 **참고**
 > - LM Studio API는 현재 `127.0.0.1`에 바인딩되어 있어 **동일 장비에서만 직접 접근** 가능합니다.
@@ -53,25 +61,29 @@
 
 ---
 
-## 현재 설치된 모델 목록
-
-총 11개 모델, 약 198GB 디스크 사용
-
 ### 권장 LLM 모델
 
 ASUS Ascent GX10 AI 슈퍼컴퓨터를 위한 LLM 모델
 (lmstudio app 내에서 검색 후 결과 중 보라색 아이콘에 해당하는 것으로 설치 권장)
 
-| 모델명 (`lms ls` 명령어 기준) | 제작사 | 크기 | 설명 | 컨텍스트 길이 |
-|------------------------|--------|------|------|---------------|
-| [`exaone-4.0-32b`](https://huggingface.co/LGAI-EXAONE/EXAONE-4.0-32B) | LGAI | 32B | 한국어 중심 작업에 활용하기 좋은 범용 텍스트 LLM | 32768 |
-| [`google/gemma-3-27b`](https://huggingface.co/google/gemma-3-27b-it) | Google | 27B | 지시 따르기/대화형 작업에 사용하는 범용 텍스트 LLM | 32768 |
-| [`openai/gpt-oss-120b`](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 120B | 핵심 추론 벤치마크에서 OpenAI o4-mini와 거의 동등한 결과를 달성 | 8192 |
-| [`openai/gpt-oss-20b`](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 20B | 일반 벤치마크에서 OpenAI o3‑mini와 비슷한 결과를 달성했으며 빠른 반복 작업에 적합 | 32768 |
-| [`qwen/qwen3-30b-a3b-2507`](https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507) | Qwen | 30B-A3B | 생성 품질과 효율을 균형 있게 쓰기 위한 MoE 계열 텍스트 LLM | 32768 |
-| [`qwen/qwen3-8b`](https://huggingface.co/Qwen/Qwen3-8B) | Qwen | 8B | 빠른 응답과 반복 작업에 적합한 경량 텍스트 LLM | 32768 |
-| [`qwen/qwen3-vl-30b`](https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct) | Qwen | 30B-A3B | 이미지+텍스트 입력을 함께 다루는 비전-언어(VL) 모델 | 65536 |
-| [`qwen3-32b`](https://huggingface.co/Qwen/Qwen3-32B) | Qwen | 32B | 고정밀 텍스트 생성/분석을 위한 32B급 텍스트 LLM | 32768 |
+#### 범용 모델
+
+| 모델명 (lms ls 기준) | 제작사 | 크기 | 설명 | 컨텍스트 | 권장 양자화 | VRAM | 초당 토큰 |
+|---|---|---|---|---|---|---|---|
+| [qwen/qwen3.5-27b](https://huggingface.co/Qwen/Qwen3.5-27B) | Qwen | 27B | 코딩·추론·대화 전반에 걸쳐 균형 잡힌 범용 LLM. GPT-5 mini와 SWE-bench 동점 | 262144 | Q5_K_M | ~20 GB | ~18–22 t/s |
+| [qwen/qwen3.5-122b-a10b](https://huggingface.co/Qwen/Qwen3.5-122B-A10B) | Qwen | 122B·10B활성 | 하이브리드 MoE로 122B급 품질을 74GB대에서 구현하는 최상위 범용 LLM | 262144 | Q4_K_M | ~74 GB | ~12–18 t/s |
+| [nvidia/nemotron-3-nano-30b-a3b](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16) | NVIDIA | 30B·3B활성 | 에이전트 다중 작업에 최적화된 초고속 경량 MoE. 동급 대비 처리량 3배 이상 | 1048576 | Q4_K_M | ~18 GB | ~30–50 t/s |
+| [nvidia/nemotron-3-super-120b-a12b](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16) | NVIDIA | 120B·12B활성 | Mamba 하이브리드로 1M 컨텍스트를 목표로 한 에이전트 추론 중심 MoE | 262144 ⚠️ | Q4_K_M | ~73 GB | ~15–22 t/s |
+| [openai/gpt-oss-120b](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 120B | 핵심 추론 벤치마크에서 OpenAI o4-mini와 거의 동등한 결과를 달성 | 8192 | Q4_K_M | ~73 GB | ~5–7 t/s |
+| [openai/gpt-oss-20b](https://openai.com/ko-KR/index/introducing-gpt-oss/) | OpenAI | 20B | 일반 벤치마크에서 OpenAI o3-mini와 비슷한 결과를 달성, 빠른 반복 작업에 적합 | 32768 | Q5_K_M | ~15 GB | ~22–28 t/s |
+
+> ⚠️ `nemotron-3-super`의 1M 컨텍스트는 llama.cpp GGUF 기준 현재 262K까지 안정 동작 확인.
+
+#### 코딩 특화 모델
+
+| 모델명 (lms ls 기준) | 제작사 | 크기 | 설명 | 컨텍스트 | 권장 양자화 | VRAM | 초당 토큰 |
+|---|---|---|---|---|---|---|---|
+| [qwen/qwen3-coder-next](https://huggingface.co/Qwen/Qwen3-Coder-Next) | Qwen | 80B·3B활성 | 에이전트 코딩 특화 MoE. 3B 활성 파라미터로 경량 동작하면서 SWE-bench 상위권 | 262144 | Q4_K_M | ~48 GB | ~35–50 t/s |
 
 ### 임베딩 모델
 
@@ -81,7 +93,18 @@ ASUS Ascent GX10 AI 슈퍼컴퓨터를 위한 LLM 모델
 | [`text-embedding-nomic-embed-text-v1.5`](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5) | Nomic | - | 경량 임베딩 모델(문서/질문 임베딩) |  |
 | [`text-embedding-qwen3-embedding-8b`](https://huggingface.co/Qwen/Qwen3-Embedding-8B) | Qwen | 8B | 고성능 임베딩 모델(대규모 문서 임베딩/검색) |  |
 
-> 📝 **참고**: 위 컨텍스트 길이는 이 기기에서 LM Studio에 설정된 값입니다.  
+### 비전-언어(VL) 모델
+
+| 모델명 (lms ls 기준) | 제작사 | 크기 | 설명 | 컨텍스트 | 권장 양자화 | VRAM | 초당 토큰 |
+|---|---|---|---|---|---|---|---|
+| [qwen/qwen3-vl-30b](https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct) | Qwen | 30B·3B활성 | 이미지+텍스트 입력을 함께 다루는 비전-언어(VL) 모델 | 65536 | Q4_K_M | ~18 GB | ~20–30 t/s |
+
+> 📝 **양자화 및 속도 참고**
+> - VRAM·초당 토큰은 LM Studio에서 해당 양자화 포맷 선택 시 기준, GB10 NVLink-C2C 대역폭(~450 GB/s) 기준 추정값입니다.
+> - **Q5_K_M**: 20–50B dense 모델의 품질·속도 최적 지점
+> - **Q4_K_M**: 70B 이상 또는 MoE 전체 가중치가 큰 모델에 권장 (크기 우선)
+> - MoE 모델은 전체 가중치를 메모리에 올리되 토큰당 활성 파라미터만 연산하므로 dense 대비 빠름
+> - 배치 크기 1 기준 추정값이며, 동시 요청·컨텍스트 길이에 따라 달라집니다.
 > 모델 목록 확인: `lms ls`
 
 ### LLM 메모리(통합 메모리) 운영 권장 상한
