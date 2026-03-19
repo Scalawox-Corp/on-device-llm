@@ -26,7 +26,7 @@
 
 | 항목 | 값 |
 |---|---|
-| [Visual Studio Code](https://code.visualstudio.com/download) | 2.3.41 (arm64) |
+| [Visual Studio Code](https://code.visualstudio.com/download) | 1.112 (arm64) |
 | [Continue](https://marketplace.visualstudio.com/items?itemName=Continue.continue) (VS Code Extension) | 1.2.17 |
 | [LM Studio](https://lmstudio.ai/download) | 0.4.6 (Build 1) |
 | [Open WebUI](https://github.com/open-webui/open-webui) | v0.8.10 |
