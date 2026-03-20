@@ -31,7 +31,7 @@
 | ------------------------------------------------------------------------------------------------------------------ | --------------------------- | --------------- |
 | [Visual Studio Code](https://code.visualstudio.com/download)                                                       | 코드 에디터                      | 1.112 (arm64)   |
 | [Continue](https://marketplace.visualstudio.com/items?itemName=Continue.continue)                                  | VS Code 확장 · 로컬 AI 코드 어시스턴트 | 1.2.17          |
-| [LM Studio](https://lmstudio.ai/download)                                                                          | 로컬 LLM 서빙 툴                 | 0.4.6 (Build 1) |
+| [LM Studio](https://lmstudio.ai/download)                                                                          | 로컬 LLM 어플리케이션               | 0.4.6 (Build 1) |
 | [Open WebUI](https://github.com/open-webui/open-webui)                                                             | LLM 웹 UI · 채팅 프론트엔드 · RAG   | v0.8.10         |
 | [Page Assist](https://chromewebstore.google.com/detail/page-assist-a-web-ui-for/jfgfiigpkhlkbnfnbobbkinehhgmcaeeh) | 크롬 확장 · 브라우저 AI 사이드바        | 1.5.57          |
 | [OpenClaw](https://openclaw.ai/)                                                                                   | 로컬 자율 AI 에이전트               | 2026.3.13       |
